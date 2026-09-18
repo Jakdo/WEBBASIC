@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark John Galvan - Personal Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <header>
+        <h1> Labaratory 1 Personal Portfolio</h1>
+        <p>Presented by: Mark John Galvan | BSIT4E | 08/27/2026</p>
+       <div class="portfolio-actions" aria-label="Portfolio options">
+          <button class="portfolio-button theme-button" id="themeToggle" type="button" onclick="toggleTheme()">Use dark mode</button>
+          <button class="portfolio-button logout-button" type="button" onclick="logout()">Log out</button>
+       </div>
+   </header> 
+   
+   <main>
+        <section class="perso">
+            <div class="image">
+                <img src="pics/picko.jpeg" alt="Your Photo">
+            </div>
+            <div class="details">
+                <h2>Personal Information</h2>
+                <p><strong>Age: </strong>21</p>
+                <p><strong>Sex: </strong>Male</p>
+                <p><strong>Address: </strong>Naic, Cavite</p>
+                <p><strong>Interest: </strong>Console Games and Playing Instrument</p>
+                <p><strong>Educational Attainment: </strong> Currently Student of Bachelor of Science of Informtion Technology</p>
+            </div>
+        </section>
+
+        <section class="qoutes">
+            <h2>"Habang ikaw ay buhay, ikaw ay mahalaga"</h2>
+        </section>
+
+        <section class="know-more-link">
+            <div>
+                <p class="eyebrow">Explore another side of me</p>
+                <h2>See my guitar covers</h2>
+            </div>
+            <a class="page-button" href="knowme.html">Open Guitar Covers <span aria-hidden="true">&rarr;</span></a>
+        </section>
+
+        <section class="spotify-section">
+            <p class="eyebrow">Now playing</p>
+            <h2>My Spotify Track</h2>
+            <p class="section-intro">Listen to a track I would like to share.</p>
+            <iframe
+                class="spotify-embed"
+                src="https://open.spotify.com/embed/track/3Q6n70tX5unGXUxHcRVsak?utm_source=generator&si=6766d51b0d5c43bb"
+                title="Spotify track player"
+                loading="lazy"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </section>
+
+        <section class="forms">
+            <h2>Contact Me</h2>
+            <form>
+                <div class="form-field">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <fieldset class="gender-options">
+                    <legend>Gender:</legend>
+                    <label class="radio-option" for="male">
+                        <input type="radio" id="male" name="gender" value="male">
+                        Male
+                    </label>
+                    <label class="radio-option" for="female">
+                        <input type="radio" id="female" name="gender" value="female">
+                        Female
+                    </label>
+                </fieldset>
+
+                <label for="interest">Interest: </label>
+                <select id="interest" name="interest">
+                    <option value="gaming">Gaming</option>
+                    <option value="music">Music</option>
+                    <option value="sports">Sports</option>
+                    <option value="reading">Reading</option>
+                </select>
+
+                <label for="message">Message: </label> 
+                <textarea id="message" name="message" rows="4" cols="50" placeholder="Write your message here:" required></textarea>
+
+                <input type="checkbox" id="subscribe" name="subscribe" value="subscribe">
+                <label for="subscribe">Subscribe for updates</label><br><br>
+
+                <input type="submit" value="Submit">    
+            </form>
+        </section>
+
+        <section class="city_loc">
+            <h2>City Location</h2>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d61860.101874993336!2d120.74927768278589!3d14.296531582570738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e0!3m2!1sen!2sph!4v1787831605577!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+
+        </section>
+        
+   </main>
+
+   <script src="gsap-public/gsap-public/minified/gsap.min.js"></script>
+   <script src="gsap-public/gsap-public/minified/ScrollTrigger.min.js"></script>
+   <script>
+       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+       if (!prefersReducedMotion) gsap.registerPlugin(ScrollTrigger);
+
+        function applyTheme(isDark) {
+            document.body.classList.toggle('dark-mode', isDark);
+            document.getElementById('themeToggle').textContent = isDark ? 'Use light mode' : 'Use dark mode';
+        }
+
+        function toggleTheme() {
+            const isDark = !document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', String(isDark));
+            applyTheme(isDark);
+            if (!prefersReducedMotion) {
+                gsap.fromTo('header', { backgroundPosition: '0 0' }, { backgroundPosition: '100% 0', duration: 0.7, ease: 'power2.out' });
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            alert('You have successfully logged out.');
+            window.location.href = 'index.html';
+        }
+
+        applyTheme(localStorage.getItem('darkMode') === 'true');
+
+        gsap.from('header h1, header p, .portfolio-actions', {
+            autoAlpha: 0,
+            y: 20,
+            duration: prefersReducedMotion ? 0 : 0.65,
+            stagger: prefersReducedMotion ? 0 : 0.08,
+            ease: 'power3.out',
+            clearProps: 'transform'
+        });
+
+        if (!prefersReducedMotion) {
+            const sections = gsap.utils.toArray('main > section');
+
+            gsap.set(sections, { autoAlpha: 0, y: 42 });
+            sections.forEach((section) => {
+                gsap.to(section, {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.75,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 84%',
+                        toggleActions: 'play reverse play reverse'
+                    }
+                });
+            });
+
+            gsap.to('header', {
+                yPercent: -12,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: 'header',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            [
+                ['.perso .details > *', '.perso'],
+                ['.spotify-section > *', '.spotify-section'],
+                ['.forms > *', '.forms'],
+                ['.city_loc > *', '.city_loc']
+            ].forEach(([content, section]) => {
+                gsap.from(content, {
+                    autoAlpha: 0,
+                    y: 18,
+                    duration: 0.5,
+                    stagger: 0.07,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 72%',
+                        toggleActions: 'play reverse play reverse'
+                    }
+                });
+            });
+        }
+
+        const profileImage = document.querySelector('.image img');
+        if (profileImage && !prefersReducedMotion) {
+            profileImage.addEventListener('mouseenter', () => gsap.to(profileImage, { rotation: 4, scale: 1.06, duration: 0.3, ease: 'power2.out' }));
+            profileImage.addEventListener('mouseleave', () => gsap.to(profileImage, { rotation: 0, scale: 1, duration: 0.3, ease: 'power2.out' }));
+        }
+   </script>
+</body>
+</html>

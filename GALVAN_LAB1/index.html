@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Mark John's Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="account-page">
+        <div class="account-shell">
+            <section class="account-intro" aria-labelledby="welcome-heading">
+                <div>
+                    <p class="account-kicker">Mark John Galvan / Portfolio</p>
+                    <h1 id="welcome-heading">A personal space for ideas, music, and code.</h1>
+                    <p>Sign in to continue to the personal portfolio and explore the work behind Laboratory 1.</p>
+                </div>
+                <div class="account-mark" aria-hidden="true">MJG</div>
+            </section>
+
+            <section class="account-panel" aria-live="polite">
+                <div id="loginPage">
+                    <h2>Welcome back</h2>
+                    <p class="account-description">Login to access the portfolio.</p>
+
+                    <form class="account-form" onsubmit="login(event)">
+                        <label for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" autocomplete="username" placeholder="Enter your username" required>
+
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Enter your password" required>
+
+                        <button class="account-button" type="submit">Login</button>
+                        <p id="loginMessage" class="account-message" role="status"></p>
+                    </form>
+
+                    <p class="account-switch">Don't have an account?
+                        <button type="button" onclick="showRegister()">Register here</button>
+                    </p>
+                </div>
+
+                <div id="registerPage" hidden>
+                    <h2>Create an account</h2>
+                    <p class="account-description">Register to enter the portfolio.</p>
+
+                    <form class="account-form" onsubmit="register(event)">
+                        <label for="registerName">Full name</label>
+                        <input type="text" id="registerName" autocomplete="name" placeholder="Enter your full name" required>
+
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" autocomplete="username" placeholder="Create a username" required>
+
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" autocomplete="new-password" placeholder="At least 5 characters" required>
+
+                        <label for="confirmPassword">Confirm password</label>
+                        <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Repeat your password" required>
+
+                        <button class="account-button" type="submit">Register</button>
+                        <p id="registerMessage" class="account-message" role="status"></p>
+                    </form>
+
+                    <p class="account-switch">Already have an account?
+                        <button type="button" onclick="showLogin()">Back to login</button>
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="gsap-public/gsap-public/minified/gsap.min.js"></script>
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const motionDuration = prefersReducedMotion ? 0 : 0.55;
+        const motionEase = 'power3.out';
+
+        function animateMessage(element) {
+            if (prefersReducedMotion) return;
+            gsap.fromTo(element, { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: motionEase });
+        }
+
+        function animateSubmitButton(button, onComplete) {
+            if (prefersReducedMotion) {
+                if (onComplete) onComplete();
+                return;
+            }
+
+            gsap.timeline({ onComplete: onComplete })
+                .to(button, { scale: 0.96, duration: 0.1, ease: 'power2.in' })
+                .to(button, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+        }
+
+        function animateFormSwap(currentId, nextId, focusId) {
+            const current = document.getElementById(currentId);
+            const next = document.getElementById(nextId);
+
+            if (prefersReducedMotion) {
+                current.hidden = true;
+                next.hidden = false;
+                document.getElementById(focusId).focus();
+                return;
+            }
+
+            gsap.to(current, {
+                autoAlpha: 0,
+                x: -18,
+                duration: 0.22,
+                ease: 'power2.in',
+                onComplete: () => {
+                    current.hidden = true;
+                    next.hidden = false;
+                    gsap.fromTo(next, { autoAlpha: 0, x: 18 }, {
+                        autoAlpha: 1,
+                        x: 0,
+                        duration: motionDuration,
+                        ease: motionEase,
+                        onComplete: () => document.getElementById(focusId).focus()
+                    });
+                }
+            });
+        }
+
+        function showRegister() {
+            animateFormSwap('loginPage', 'registerPage', 'registerName');
+        }
+
+        function showLogin() {
+            animateFormSwap('registerPage', 'loginPage', 'loginUsername');
+        }
+
+        function setMessage(element, text, type) {
+            element.textContent = text;
+            element.className = 'account-message ' + type;
+            animateMessage(element);
+        }
+
+        function register(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById('registerName').value.trim();
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const message = document.getElementById('registerMessage');
+
+            if (!fullName || !username || !password || !confirmPassword) {
+                setMessage(message, 'Please complete all registration fields.', 'error');
+                return;
+            }
+
+            if (password.length < 5) {
+                setMessage(message, 'Password must contain at least 5 characters.', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                setMessage(message, 'Passwords do not match.', 'error');
+                return;
+            }
+
+            localStorage.setItem('fullName', fullName);
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+
+            const finishRegistration = () => {
+                alert('Registration successful! You can now log in.');
+                showLogin();
+                setMessage(document.getElementById('loginMessage'), 'Registration successful. You can now login.', 'success');
+            };
+            if (prefersReducedMotion) finishRegistration();
+            else gsap.delayedCall(0.45, finishRegistration);
+        }
+
+        function login(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const message = document.getElementById('loginMessage');
+            const savedUsername = localStorage.getItem('username');
+            const savedPassword = localStorage.getItem('password');
+
+            if (!username || !password) {
+                setMessage(message, 'Please enter your username and password.', 'error');
+                return;
+            }
+
+            if (username === savedUsername && password === savedPassword) {
+                localStorage.setItem('isLoggedIn', 'true');
+                const finishLogin = () => {
+                    alert('Login successful! Welcome back, ' + (localStorage.getItem('fullName') || username) + '.');
+                    window.location.href = 'GALVAN_LAB1.html';
+                };
+                if (prefersReducedMotion) finishLogin();
+                else gsap.delayedCall(0.45, finishLogin);
+                return;
+            }
+
+            setMessage(message, 'Incorrect username or password.', 'error');
+        }
+
+        gsap.from('.account-intro > *, .account-panel > *', {
+            autoAlpha: 0,
+            y: 22,
+            duration: motionDuration,
+            stagger: prefersReducedMotion ? 0 : 0.08,
+            ease: motionEase,
+            clearProps: 'transform'
+        });
+
+        document.querySelectorAll('.account-form input').forEach((input) => {
+            input.addEventListener('focus', () => {
+                if (!prefersReducedMotion) gsap.to(input, { x: 4, duration: 0.18, ease: 'power2.out' });
+            });
+            input.addEventListener('blur', () => {
+                if (!prefersReducedMotion) gsap.to(input, { x: 0, duration: 0.18, ease: 'power2.out' });
+            });
+        });
+
+        document.querySelectorAll('.account-button').forEach((button) => {
+            button.addEventListener('click', () => animateSubmitButton(button));
+        });
+    </script>
+</body>
+</html>

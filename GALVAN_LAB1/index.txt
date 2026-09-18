@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Biography Website</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        /* ==========================
+           LOGIN AND REGISTER
+        ========================== */
+
+        .account-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #064e3b, #16a34a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .account-box {
+            width: 380px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .account-box h1 {
+            color: #15803d;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .account-box .description {
+            color: #666;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .account-box label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .account-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .account-box input:focus {
+            border-color: #16a34a;
+        }
+
+        .main-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #15803d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .main-button:hover {
+            background-color: #166534;
+        }
+
+        .switch-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .switch-text a {
+            color: #15803d;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .switch-text a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        /* Hide register page initially */
+
+        #registerPage {
+            display: none;
+        }
+
+        /* ==========================
+           PROFILE PAGE
+        ========================== */
+
+        #profilePage {
+            display: none;
+            min-height: 100vh;
+            background-color: #f1f5f1;
+        }
+
+        nav {
+            background-color: #14532d;
+            color: white;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            color: #bbf7d0;
+        }
+
+        .logout-button {
+            background-color: #ef4444;
+            border: none;
+            padding: 9px 16px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #dc2626;
+        }
+
+        .hero {
+            min-height: 430px;
+            background: linear-gradient(135deg, #166534, #22c55e);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            margin: auto;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            background-color: white;
+            color: #15803d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 65px;
+            border: 5px solid #bbf7d0;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        section {
+            padding: 60px 10%;
+        }
+
+        section h2 {
+            color: #166534;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        section p {
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .info-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #15803d;
+            margin-bottom: 10px;
+        }
+
+        .skills {
+            margin-top: 20px;
+        }
+
+        .skills span {
+            display: inline-block;
+            background-color: #dcfce7;
+            color: #166534;
+            margin: 5px;
+            padding: 10px 16px;
+            border-radius: 20px;
+        }
+
+        .show-button {
+            padding: 11px 18px;
+            margin-top: 20px;
+            margin-right: 5px;
+            background-color: #15803d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .show-button:hover {
+            background-color: #166534;
+        }
+
+        #moreInfo {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #dcfce7;
+            border-left: 5px solid #15803d;
+        }
+
+        footer {
+            background-color: #14532d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 700px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .account-box {
+                width: 90%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     LOGIN PAGE
+===================================================== -->
+
+<div id="loginPage" class="account-page">
+
+    <div class="account-box">
+
+        <h1>Login</h1>
+
+        <p class="description">
+            Login to access your biography profile.
+        </p>
+
+        <label>Username</label>
+
+        <input
+            type="text"
+            id="loginUsername"
+            placeholder="Enter your username"
+        >
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Enter your password"
+        >
+
+        <button class="main-button" onclick="login()">
+            Login
+        </button>
+
+        <p id="loginMessage" class="message error"></p>
+
+        <div class="switch-text">
+
+            Don't have an account?
+
+            <a onclick="showRegister()">
+                Register Here
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REGISTRATION PAGE
+===================================================== -->
+
+<div id="registerPage" class="account-page">
+
+    <div class="account-box">
+
+        <h1>Create Account</h1>
+
+        <p class="description">
+            Fill out the form to register.
+        </p>
+
+        <label>Full Name</label>
+
+        <input
+            type="text"
+            id="registerName"
+            placeholder="Enter your full name"
+        >
+
+        <label>Username</label>
+
+        <input
+            type="text"
+            id="registerUsername"
+            placeholder="Create a username"
+        >
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            id="registerPassword"
+            placeholder="Create a password"
+        >
+
+        <label>Confirm Password</label>
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm your password"
+        >
+
+        <button class="main-button" onclick="register()">
+            Register
+        </button>
+
+        <p id="registerMessage" class="message"></p>
+
+        <div class="switch-text">
+
+            Already have an account?
+
+            <a onclick="showLogin()">
+                Back to Login
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     BIOGRAPHY / PROFILE PAGE
+===================================================== -->
+
+<div id="profilePage">
+
+
+    <!-- NAVIGATION -->
+
+    <nav>
+
+        <h2>My Biography</h2>
+
+        <ul>
+
+            <li>
+                <a href="#home">Home</a>
+            </li>
+
+            <li>
+                <a href="#about">About Me</a>
+            </li>
+
+            <li>
+                <a href="#education">Education</a>
+            </li>
+
+            <li>
+                <a href="#skills">Skills</a>
+            </li>
+
+        </ul>
+
+        <button class="logout-button" onclick="logout()">
+            Logout
+        </button>
+
+    </nav>
+
+
+    <!-- HOME -->
+
+    <div class="hero" id="home">
+
+        <div>
+
+            <div class="profile-picture">
+                👤
+            </div>
+
+            <h1 id="profileName">
+                Juan Dela Cruz
+            </h1>
+
+            <p>
+                Information Technology Student
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ABOUT ME -->
+
+    <section id="about">
+
+        <h2>About Me</h2>
+
+        <p>
+            Hello! I am an Information Technology student who is
+            interested in technology, programming, web development,
+            and designing interactive websites.
+        </p>
+
+        <button
+            class="show-button"
+            onclick="showMore()"
+        >
+            Show More
+        </button>
+
+        <button
+            class="show-button"
+            onclick="hideInfo()"
+        >
+            Hide Information
+        </button>
+
+
+        <div id="moreInfo">
+
+            <p>
+                I enjoy learning new technologies, creating websites,
+                solving computer-related problems, and improving my
+                programming skills. My goal is to become a successful
+                IT professional someday.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- PERSONAL INFORMATION -->
+
+    <section>
+
+        <h2>Personal Information</h2>
+
+        <div class="info-container">
+
+            <div class="card">
+
+                <h3>Full Name</h3>
+
+                <p id="displayFullName">
+                    Juan Dela Cruz
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Age</h3>
+
+                <p>20 Years Old</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Location</h3>
+
+                <p>Cavite, Philippines</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Course</h3>
+
+                <p>
+                    Bachelor of Science in Information Technology
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EDUCATION -->
+
+    <section id="education">
+
+        <h2>Education</h2>
+
+        <div class="info-container">
+
+            <div class="card">
+
+                <h3>Elementary</h3>
+
+                <p>
+                    ABC Elementary School
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>High School</h3>
+
+                <p>
+                    ABC National High School
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>College</h3>
+
+                <p>
+                    Cavite State University
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SKILLS -->
+
+    <section id="skills">
+
+        <h2>My Skills</h2>
+
+        <div class="skills">
+
+            <span>HTML</span>
+
+            <span>CSS</span>
+
+            <span>JavaScript</span>
+
+            <span>Web Design</span>
+
+            <span>Problem Solving</span>
+
+            <span>Communication</span>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        © 2026 My Biography Website
+
+    </footer>
+
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+    /* =====================================
+       SWITCH TO REGISTER PAGE
+    ===================================== */
+
+    function showRegister() {
+
+        document.getElementById("loginPage").style.display = "none";
+
+        document.getElementById("registerPage").style.display = "flex";
+
+    }
+
+
+
+    /* =====================================
+       SWITCH BACK TO LOGIN PAGE
+    ===================================== */
+
+    function showLogin() {
+
+        document.getElementById("registerPage").style.display = "none";
+
+        document.getElementById("loginPage").style.display = "flex";
+
+    }
+
+
+
+    /* =====================================
+       REGISTRATION FUNCTION
+    ===================================== */
+
+    function register() {
+
+        let fullName =
+            document.getElementById("registerName").value;
+
+        let username =
+            document.getElementById("registerUsername").value;
+
+        let password =
+            document.getElementById("registerPassword").value;
+
+        let confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+        let message =
+            document.getElementById("registerMessage");
+
+
+        /* Check empty fields */
+
+        if (
+            fullName === "" ||
+            username === "" ||
+            password === "" ||
+            confirmPassword === ""
+        ) {
+
+            message.innerHTML =
+                "Please complete all registration fields.";
+
+            message.className = "message error";
+
+            return;
+
+        }
+
+
+        /* Check password length */
+
+        if (password.length < 5) {
+
+            message.innerHTML =
+                "Password must contain at least 5 characters.";
+
+            message.className = "message error";
+
+            return;
+
+        }
+
+
+        /* Check passwords */
+
+        if (password !== confirmPassword) {
+
+            message.innerHTML =
+                "Passwords do not match.";
+
+            message.className = "message error";
+
+            return;
+
+        }
+
+
+        /* Save information using localStorage */
+
+        localStorage.setItem("fullName", fullName);
+
+        localStorage.setItem("username", username);
+
+        localStorage.setItem("password", password);
+
+
+        message.innerHTML =
+            "Registration Successful!";
+
+        message.className = "message success";
+
+
+        alert(
+            "Registration Successful! You can now login."
+        );
+
+
+        /* Clear registration form */
+
+        document.getElementById("registerName").value = "";
+
+        document.getElementById("registerUsername").value = "";
+
+        document.getElementById("registerPassword").value = "";
+
+        document.getElementById("confirmPassword").value = "";
+
+
+        /* Return to Login after registration */
+
+        showLogin();
+
+    }
+
+
+
+    /* =====================================
+       LOGIN FUNCTION
+    ===================================== */
+
+    function login() {
+
+        let username =
+            document.getElementById("loginUsername").value;
+
+        let password =
+            document.getElementById("loginPassword").value;
+
+        let message =
+            document.getElementById("loginMessage");
+
+
+        /* Retrieve registered account */
+
+        let savedUsername =
+            localStorage.getItem("username");
+
+        let savedPassword =
+            localStorage.getItem("password");
+
+        let savedName =
+            localStorage.getItem("fullName");
+
+
+        /* Check empty fields */
+
+        if (username === "" || password === "") {
+
+            message.innerHTML =
+                "Please enter your username and password.";
+
+            alert(
+                "Username and Password are required."
+            );
+
+            return;
+
+        }
+
+
+        /* Check account */
+
+        if (
+            username === savedUsername &&
+            password === savedPassword
+        ) {
+
+            alert(
+                "Login Successful! Welcome " + savedName + "!"
+            );
+
+
+            /* Hide login page */
+
+            document.getElementById("loginPage").style.display =
+                "none";
+
+
+            /* Show profile page */
+
+            document.getElementById("profilePage").style.display =
+                "block";
+
+
+            /* Display registered person's name */
+
+            document.getElementById("profileName").innerHTML =
+                savedName;
+
+            document.getElementById("displayFullName").innerHTML =
+                savedName;
+
+
+            /* Clear message */
+
+            message.innerHTML = "";
+
+        }
+
+        else {
+
+            message.innerHTML =
+                "Incorrect username or password.";
+
+            alert(
+                "Login failed. Please check your username and password."
+            );
+
+        }
+
+    }
+
+
+
+    /* =====================================
+       SHOW MORE INFORMATION
+    ===================================== */
+
+    function showMore() {
+
+        document.getElementById("moreInfo").style.display =
+            "block";
+
+    }
+
+
+
+    /* =====================================
+       HIDE INFORMATION
+    ===================================== */
+
+    function hideInfo() {
+
+        document.getElementById("moreInfo").style.display =
+            "none";
+
+    }
+
+
+
+    /* =====================================
+       LOGOUT FUNCTION
+    ===================================== */
+
+    function logout() {
+
+        document.getElementById("profilePage").style.display =
+            "none";
+
+        document.getElementById("loginPage").style.display =
+            "flex";
+
+
+        /* Clear Login Fields */
+
+        document.getElementById("loginUsername").value =
+            "";
+
+        document.getElementById("loginPassword").value =
+            "";
+
+
+        alert(
+            "You have successfully logged out."
+        );
+
+    }
+
+
+</script>
+
+</body>
+</html>

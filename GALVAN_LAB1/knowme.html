@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal portfolio and guitar covers by Mark John Galvan.">
+    <title>Know Me | Mark John Galvan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="videos-only-page">
+    <main class="videos-only">
+        <a class="back-link" href="GALVAN_LAB1.html">&larr; Back to portfolio</a>
+        <div class="video-grid">
+            <section class="video-card">
+                <div class="video-heading">
+                    <p class="video-label">Hey Barbara by IV of Spades // Bass Cover</p>
+                </div>
+                <video controls controlslist="nofullscreen" preload="metadata">
+                    <source src="vid/heybarbara.mp4" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </section>
+            <section class="video-card">
+                <div class="video-heading">
+                    <p class="video-label">Konsensya by IV of Spades // Guitar Solo Cover</p>
+                </div>
+                <video controls controlslist="nofullscreen" preload="metadata">
+                    <source src="vid/konsensya.mp4" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </section>
+            <section class="video-card">
+                <div class="video-heading">
+                    <p class="video-label">Monster by IV of Spades // Intro Cover</p>
+                </div>
+                <video controls controlslist="nofullscreen" preload="metadata">
+                    <source src="vid/monster.mp4" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </section>
+            <section class="video-card">
+                <div class="video-heading">
+                    <p class="video-label">Panaginip by nicole // Intro Cover</p>
+                </div>
+                <video controls controlslist="nofullscreen" preload="metadata">
+                    <source src="vid/panaginip.mp4" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </section>
+        </div>
+            <script>
+        function setupExclusiveVideos() {
+            const videos = document.querySelectorAll('.video-grid video');
+            const videoCards = document.querySelectorAll('.video-card');
+
+            if ('IntersectionObserver' in window) {
+                videoCards.forEach((videoCard) => videoCard.classList.add('scroll-reveal'));
+
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        entry.target.classList.toggle('is-visible', entry.isIntersecting);
+                    });
+                }, { threshold: 0.18 });
+
+                videoCards.forEach((videoCard) => revealObserver.observe(videoCard));
+            } else {
+                videoCards.forEach((videoCard) => videoCard.classList.add('is-visible'));
+            }
+
+            videos.forEach((video) => {
+                const videoSection = video.closest('.video-card');
+
+                video.addEventListener('play', () => {
+                    videoSection.classList.add('is-playing');
+                    videos.forEach((otherVideo) => {
+                        if (otherVideo !== video) {
+                            otherVideo.pause();
+                        }
+                    });
+                });
+
+                video.addEventListener('pause', () => {
+                    videoSection.classList.remove('is-playing');
+                });
+
+                video.addEventListener('ended', () => {
+                    videoSection.classList.remove('is-playing');
+                });
+            });
+        }
+
+        setupExclusiveVideos();
+    </script>
+    </main>
+</body>
+</html>
